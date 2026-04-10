@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Editor de Imagens Organizadas</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .container {
+    width: 210mm;
+    margin: auto;
+    background: #fff;
+    padding: 15mm;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 20px;
+    justify-content: center;
+  }
+
+  /* Caixa padrão pequena */
+  .box {
+    min-width: 60mm;
+    min-height: 60mm;
+    max-width: 60mm;
+    max-height: 60mm;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eee;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* NÃO corta */
+    display: block;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  button {
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 16px;
+    border: none;
+    background: #000;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  @media print {
+    body {
+      background: #fff;
+    }
+    button {
+      display: none;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Imagens Pequenas e Organizadas</h2>
+
+  <div class="grid" id="grid"></div>
+
+  <button onclick="window.print()">🖨️ IMPRIMIR</button>
+</div>
+
+<script>
+  const grid = document.getElementById("grid");
+  const totalBoxes = 12;
+
+  for (let i = 0; i < totalBoxes; i++) {
+    const box = document.createElement("div");
+    box.className = "box";
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+
+      box.innerHTML = "";
+      box.appendChild(img);
+    });
+
+    box.addEventListener("click", () => input.click());
+
+    box.appendChild(input);
+    grid.appendChild(box);
+  }
+</script>
+
+</body>
+</html>
